@@ -21,4 +21,5 @@ Technologies used in the project:
 *   Go
 
 <h2> Installation </h2>
+
 *   I'll add a dockerfile that has all the dependencies required
