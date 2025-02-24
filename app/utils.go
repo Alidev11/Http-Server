@@ -1,5 +1,4 @@
-package main;
-
+package main
 
 import(
 	"strings"
@@ -11,7 +10,7 @@ import(
 )
 
 // checks if url is in the server
-func isUrlValid(url string) bool{
+func IsUrlValid(url string) bool{
 	switch url{
 	case "/":
 		return true
@@ -20,7 +19,7 @@ func isUrlValid(url string) bool{
 	}
 }
 
-func getParam(urlPath string) (string, error){
+func GetParam(urlPath string) (string, error){
 	params := strings.Split(urlPath, "/")
 	if len(params)>=3{
 		fmt.Print(params[2])
@@ -29,7 +28,7 @@ func getParam(urlPath string) (string, error){
 	return "", errors.New("no parameter found")
 }
 
-func getUrlPath(connection net.Conn) (string){
+func GetUrlPath(connection net.Conn) string{
 	// Part 3: extract url from request
 	buffer := make([]byte, 1024)
 		
@@ -47,7 +46,7 @@ func getUrlPath(connection net.Conn) (string){
 	return reqSplitted[1]
 }
 
-func respondParameter(parameter string) (string){
+func RespondParameter(parameter string) (string){
 	return fmt.Sprintf(
 		"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %d\r\n\r\n%s",
 		len(parameter), parameter,
@@ -55,18 +54,18 @@ func respondParameter(parameter string) (string){
 }
 
 // main function to return a response
-func respond(urlPath string, connection net.Conn){
-	parameter, _ := getParam(urlPath)
+func Respond(urlPath string, connection net.Conn){
+	parameter, _ := GetParam(urlPath)
 	response := ""
 	
 	if parameter == ""{
-		if !isUrlValid(urlPath){
-			response = "HTTP/1.1 404 NOT FOUND"
+		if !IsUrlValid(urlPath){
+			response = "HTTP/1.1 404 NOT FOUND\r\n\r\n"
 		}else{
-			response = "HTTP/1.1 200 OK"
+			response = "HTTP/1.1 200 OK\r\n\r\n"
 		}
 	}else{
-		response = respondParameter(parameter)
+		response = RespondParameter(parameter)
 	}
 
 	_, writeErr := connection.Write([]byte(response))

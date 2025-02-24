@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	// Establish connection with client
+	// -----------------------
 	tcpServer, err := net.Listen("tcp", "0.0.0.0:4221")
 	if err != nil {
 		log.Fatalln("Found error when creating the server")
@@ -17,7 +17,9 @@ func main() {
 	defer tcpServer.Close()
 	log.Println("Server listening on port 4221...")
 	
-	// ----------------------- Infinite loop to keep server running ------------------------------------------
+
+
+	// ------------------------
 	for{
 		// conn contains the request
 		conn, err := tcpServer.Accept()
@@ -26,11 +28,9 @@ func main() {
 			os.Exit(1)
 		}
 
-		// get url path
-		urlPath := getUrlPath(conn)
+		urlPath := GetUrlPath(conn)
 
-		// return the response based on the url path format
-		respond(urlPath, conn)
+		Respond(urlPath, conn)
 		conn.Close()
 	}	
 }
