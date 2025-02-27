@@ -26,7 +26,6 @@ func ParseRequest(connection net.Conn) map[int]string{
 	for i, value := range reqSplitted{
 		m[i] = value
 	}
-	fmt.Println(m)
 
 	return m
 }
@@ -42,14 +41,13 @@ func GetParam(urlPath string) (string, error){
 	if len(params)>=3{
 		return params[2], nil
 	}
-	return "", errors.New("no paramet found")
+	return "", errors.New("no parameter found")
 }
 
 func ReadHeader(parsedReq map[int]string) (string){
 	for _, value := range parsedReq{
 		userAgentHeader, cond := strings.CutPrefix(value, "User-Agent: ")
-		// fmt.Printf(userAgentHeader)
-		fmt.Println(cond)
+	
 		if cond{
 			return fmt.Sprintf(
 				"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %d\r\n\r\n%s",
@@ -74,7 +72,6 @@ func Respond(urlPath string, parsedReq map[int]string){
 			case "/user-agent":
 				response = ReadHeader(parsedReq)
 			default:
-				fmt.Println("Default response")
 				response = "HTTP/1.1 404 NOT FOUND\r\n\r\n"
 		}
 	}else{
