@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+var Conn net.Conn 
+
 func main() {
 	// -----------------------
 	tcpServer, err := net.Listen("tcp", "0.0.0.0:4221")
@@ -16,21 +18,21 @@ func main() {
 	}
 	defer tcpServer.Close()
 	log.Println("Server listening on port 4221...")
-	
-
 
 	// ------------------------
 	for{
 		// conn contains the request
-		conn, err := tcpServer.Accept()
+		Conn, err = tcpServer.Accept()
 		if err != nil {
 			log.Fatalln("Can't connect to server!")
 			os.Exit(1)
 		}
 
-		urlPath := GetUrlPath(conn)
+		parsedReq := ParseRequest(Conn)
 
-		Respond(urlPath, conn)
-		conn.Close()
+		urlPath := GetUrlPath(parsedReq)
+
+		Respond(urlPath, parsedReq)
+		Conn.Close()
 	}	
 }
